@@ -8,6 +8,7 @@ from plugins.plugin_registry import get_plugin_instance
 from utils.image_utils import compute_image_hash
 from model import RefreshInfo, PlaylistManager
 from PIL import Image
+import gc  # New: Import garbage collection module
 
 logger = logging.getLogger(__name__)
 
@@ -119,6 +120,8 @@ class RefreshTask:
                         self.device_config.refresh_info = RefreshInfo(**refresh_info)
 
                     self.device_config.write_config()
+                     # New: Free unused memory to reduce long-term bloat
+                    gc.collect()
 
             except Exception as e:
                 logging.exception('Exception during refresh')
@@ -252,7 +255,8 @@ class PlaylistRefresh(RefreshAction):
             self.plugin_instance.latest_refresh_time = current_dt.isoformat()
         else:
             logger.info(f"Not time to refresh plugin instance, using latest image. | plugin_instance: {self.plugin_instance.name}.")
-            # Load the existing image from disk
-            image = Image.open(plugin_image_path)
+            # New: Use 'with' to avoid leaving file handles open
+            with Image.open(plugin_image_path) as img:
+                image = img.copy()  # Work with a copy and close the file immediately
 
         return image
