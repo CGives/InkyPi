@@ -255,6 +255,7 @@ class PlaylistRefresh(RefreshAction):
             self.plugin_instance.latest_refresh_time = current_dt.isoformat()
         else:
             logger.info(f"Not time to refresh plugin instance, using latest image. | plugin_instance: {self.plugin_instance.name}.")
+            # Load the existing image from disk
             # New: Use 'with' to avoid leaving file handles open
             with Image.open(plugin_image_path) as img:
                 image = img.copy()  # Work with a copy and close the file immediately
