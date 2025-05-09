@@ -1,12 +1,16 @@
-from threading import Thread, Event, Condition
-from datetime import datetime
-from time import sleep
+import threading
+import time
+import os
 import logging
+import pytz
+from datetime import datetime, timezone
 
-from InkyPi.src.config import RefreshInfo
-from .playlist import PlaylistRefresh
-from .plugin_manager import get_plugin_instance
-from .image_utils import compute_image_hash
+# Absolute imports for plugin_registry, image_utils, model, etc.
+from plugins.plugin_registry import get_plugin_instance
+from utils.image_utils import compute_image_hash
+from model import RefreshInfo, PlaylistManager
+from PIL import Image
+
 
 logger = logging.getLogger(__name__)
 
