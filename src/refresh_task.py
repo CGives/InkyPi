@@ -3,7 +3,7 @@ from datetime import datetime
 from time import sleep
 import logging
 
-from .config import RefreshInfo
+from InkyPi.src.config import RefreshInfo
 from .playlist import PlaylistRefresh
 from .plugin_manager import get_plugin_instance
 from .image_utils import compute_image_hash
